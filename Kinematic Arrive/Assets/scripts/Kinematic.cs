@@ -19,18 +19,14 @@ public class Kinematic : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        
         Vector3 towards = target.position - mover.position;
-        mover.rotation = Quaternion.LookRotation(towards);
+        
+        if (towards.magnitude <= stop) { return; }
+        mover.rotation = Quaternion.Lerp(mover.rotation, Quaternion.LookRotation(towards), .1f);
+        rigidBodMover.velocity = transform.forward.normalized * speed;
 
-        if (towards.magnitude > stop)
-        {
-
-            towards.Normalize();
-            towards *= speed;
-
-            rigidBodMover.velocity = towards;
-        }
     }
 }
